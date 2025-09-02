@@ -129,6 +129,11 @@ export default function ImageEditor() {
   }, [showHistory])
 
   const createNewConversation = useCallback(() => {
+    if (currentConversationId && localMessages.length === 0 && localGeneratedImages.length === 0) {
+      console.log("[v0] Current conversation is already empty, not creating new one")
+      return
+    }
+
     const newId = Date.now().toString()
     const newConversation: Conversation = {
       id: newId,
@@ -151,7 +156,7 @@ export default function ImageEditor() {
     setSelectedImage(null)
     setSelectedVersion(null)
     setPrompt("")
-  }, [saveConversation, refetchConversations])
+  }, [saveConversation, refetchConversations, currentConversationId, localMessages.length, localGeneratedImages.length])
 
   const loadConversation = useCallback((conversationId: string) => {
     setCurrentConversationId(conversationId)
